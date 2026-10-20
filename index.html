@@ -1,29 +1,173 @@
-Understanding GitHub Code Search syntax
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aviator Lucky 666 AI</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#090d18;
+  color:white;
+  font-family:Arial,sans-serif;
+}
+header{
+  background:#151c30;
+  padding:20px;
+  text-align:center;
+  border-bottom:2px solid #714cff;
+}
+h1{color:#b7a0ff;margin:0}
+main{max-width:500px;margin:20px auto;padding:15px}
+.card{
+  background:#151c30;
+  padding:20px;
+  border-radius:15px;
+  margin-bottom:16px;
+  border:1px solid #343d59;
+}
+input,button{
+  width:100%;
+  padding:13px;
+  margin-top:10px;
+  border-radius:8px;
+  font-size:16px;
+}
+input{
+  background:#090d18;
+  border:1px solid #59627e;
+  color:white;
+}
+button{
+  background:#7854ff;
+  color:white;
+  border:0;
+  font-weight:bold;
+  cursor:pointer;
+}
+.result{
+  font-size:32px;
+  text-align:center;
+  color:#69f0ae;
+  font-weight:bold;
+  margin:15px 0;
+}
+.small{color:#bac3dc;font-size:13px;line-height:1.5}
+li{padding:6px}
+</style>
+</head>
+<body>
+<header>
+  <h1>✈ AVIATOR LUCKY 666</h1>
+  <p>Statistical Analysis Dashboard</p>
+</header>
 
-You can build search queries for the results you want with specialized code qualifiers, regular expressions, and boolean operations.
+<main>
+  <div class="card">
+    <h2>📊 Enter Previous Result</h2>
+    <label for="multiplier">Multiplier (example: 2.45)</label>
+    <input id="multiplier" type="number" min="1" step="0.01"
+           placeholder="Enter recorded multiplier">
+    <button onclick="addResult()">ADD RESULT</button>
+  </div>
 
-## About code search query structure
+  <div class="card">
+    <h2>📈 Statistical Summary</h2>
+    <div class="result" id="count">0</div>
+    <p style="text-align:center">Results recorded</p>
+    <p id="average">Average: —</p>
+    <p id="high">Results ≥ 2.00x: —</p>
+    <p id="low">Results &lt; 2.00x: —</p>
+    <button onclick="analyze()">ANALYZE HISTORY</button>
+    <p id="analysis" class="small">
+      Enter previous results to see descriptive statistics.
+    </p>
+  </div>
 
-The search syntax in this article only applies to searching code with GitHub code search. Note that the syntax and qualifiers for searching for non-code content, such as issues, users, and discussions, is not the same as the syntax for code search. For more information on non-code search, see [About searching on GitHub](/en/search-github/getting-started-with-searching-on-github/about-searching-on-github) and [Searching on GitHub](/en/search-github/searching-on-github).
+  <div class="card">
+    <h2>🗂️ Recent History</h2>
+    <ol id="history"></ol>
+    <button onclick="clearHistory()">CLEAR HISTORY</button>
+  </div>
 
-Search queries consist of search terms, comprising text you want to search for, and qualifiers, which narrow down the search.
+  <p class="small">
+    Disclaimer: Past results do not reliably predict future rounds.
+    This dashboard provides descriptive statistics, not guaranteed
+    predictions. Gamble responsibly.
+  </p>
+</main>
 
-A bare term with no qualifiers will match either the content of a file or the file's path.
+<script>
+let results = [];
 
-For example, the following query:
+function addResult(){
+  const input = document.getElementById("multiplier");
+  const value = Number(input.value);
 
-```text
-http-push
-```
+  if(!input.value || !Number.isFinite(value) || value < 1){
+    alert("Enter a valid multiplier of 1.00 or higher.");
+    return;
+  }
 
-The above query will match the file `docs/http-push.txt`, even if it doesn't contain the term `http-push`. It will also match a file called `example.txt` if it contains the term `http-push`.
+  results.unshift(Number(value.toFixed(2)));
+  results = results.slice(0,100);
+  input.value = "";
+  render();
+}
 
-You can enter multiple terms separated by whitespace to search for documents that satisfy both terms.
+function render(){
+  document.getElementById("count").textContent = results.length;
 
-For example, the following query:
+  const history = document.getElementById("history");
+  history.replaceChildren();
 
-```text
-sparse index
-```
+  results.forEach(value => {
+    const item = document.createElement("li");
+    item.textContent = value.toFixed(2) + "x";
+    history.appendChild(item);
+  });
 
-The search results would include all documents containing both
+  analyze();
+}
+
+function analyze(){
+  if(results.length === 0){
+    document.getElementById("average").textContent = "Average: —";
+    document.getElementById("high").textContent = "Results ≥ 2.00x: —";
+    document.getElementById("low").textContent = "Results < 2.00x: —";
+    document.getElementById("analysis").textContent =
+      "Enter previous results to see descriptive statistics.";
+    return;
+  }
+
+  const average = results.reduce((sum,v)=>sum+v,0)/results.length;
+  const high = results.filter(v=>v>=2).length;
+  const low = results.filter(v=>v<2).length;
+
+  document.getElementById("average").textContent =
+    "Average: " + average.toFixed(2) + "x";
+  document.getElementById("high").textContent =
+    "Results ≥ 2.00x: " + high + " (" +
+    (100*high/results.length).toFixed(1) + "%)";
+  document.getElementById("low").textContent =
+    "Results < 2.00x: " + low + " (" +
+    (100*low/results.length).toFixed(1) + "%)";
+
+  document.getElementById("analysis").textContent =
+    "Summary of " + results.length +
+    " recorded rounds. These statistics describe past data only; " +
+    "they cannot reliably determine the next multiplier.";
+}
+
+function clearHistory(){
+  if(confirm("Clear all recorded results?")){
+    results = [];
+    render();
+  }
+}
+
+render();
+</script>
+</body>
+</html>
