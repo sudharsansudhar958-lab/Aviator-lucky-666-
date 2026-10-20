@@ -1,0 +1,29 @@
+Understanding GitHub Code Search syntax
+
+You can build search queries for the results you want with specialized code qualifiers, regular expressions, and boolean operations.
+
+## About code search query structure
+
+The search syntax in this article only applies to searching code with GitHub code search. Note that the syntax and qualifiers for searching for non-code content, such as issues, users, and discussions, is not the same as the syntax for code search. For more information on non-code search, see [About searching on GitHub](/en/search-github/getting-started-with-searching-on-github/about-searching-on-github) and [Searching on GitHub](/en/search-github/searching-on-github).
+
+Search queries consist of search terms, comprising text you want to search for, and qualifiers, which narrow down the search.
+
+A bare term with no qualifiers will match either the content of a file or the file's path.
+
+For example, the following query:
+
+```text
+http-push
+```
+
+The above query will match the file `docs/http-push.txt`, even if it doesn't contain the term `http-push`. It will also match a file called `example.txt` if it contains the term `http-push`.
+
+You can enter multiple terms separated by whitespace to search for documents that satisfy both terms.
+
+For example, the following query:
+
+```text
+sparse index
+```
+
+The search results would include all documents containing both
